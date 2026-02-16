@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lunar New Year 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red-deep:#8B1A1A;--red:#CC2936;--red-bright:#E84855;--red-bg:#1A0505;
+    --gold:#F5C542;--gold-dark:#C49A2B;--gold-light:#FFE17D;
+    --cream:#FFF3D4;--pink:#FF8A8A;--dark:#0D0202;--bg-red:#3A1018;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    min-height:100vh;display:flex;align-items:center;justify-content:center;
+    background:var(--red-bg);font-family:'Silkscreen',cursive;
+    overflow-x:hidden;overflow-y:auto;position:relative;
+    transition:background 1s ease;image-rendering:pixelated;
+  }
+  body.bottle-bg{background:var(--bg-red)}
+  body.popped-bg{background:#1A0A0E}
+  body.celebrate-bg{background:#0A0015}
+
+  .pixel-bg{position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(255,255,255,0.008) 3px,rgba(255,255,255,0.008) 4px),
+    repeating-linear-gradient(90deg,transparent,transparent 3px,rgba(255,255,255,0.008) 3px,rgba(255,255,255,0.008) 4px)}
+  .lanterns{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+  .p-lantern{position:absolute;opacity:0;animation:pFloat linear infinite}
+  @keyframes pFloat{0%{transform:translateY(110vh);opacity:0}5%{opacity:0.7}95%{opacity:0.5}100%{transform:translateY(-10vh);opacity:0}}
+  .p-star{position:fixed;width:4px;height:4px;background:var(--gold);z-index:0;pointer-events:none;animation:pTwinkle ease-in-out infinite}
+  @keyframes pTwinkle{0%,100%{opacity:0.1}50%{opacity:0.7}}
+
+  /* Fireworks canvas */
+  #fireworks{position:fixed;inset:0;z-index:2;pointer-events:none;display:none}
+  #fireworks.active{display:block}
+
+  .container{position:relative;z-index:10;text-align:center;padding:1rem 1.5rem;width:100%;max-width:480px}
+  .anim-in{opacity:0;animation:pixelReveal 0.4s steps(5) forwards}
+  @keyframes pixelReveal{0%{opacity:0;transform:translateY(8px)}100%{opacity:1;transform:translateY(0)}}
+  .px-border{display:flex;align-items:center;justify-content:center;gap:6px}
+  .px-dot{width:6px;height:6px;background:var(--gold)}
+  .px-line{height:4px;width:clamp(28px,9vw,48px);background:repeating-linear-gradient(90deg,var(--gold) 0 4px,transparent 4px 8px)}
+
+  /* ===== COUNTDOWN ===== */
+  .phase-countdown{display:flex;flex-direction:column;align-items:center;transition:opacity 0.6s ease}
+  .phase-countdown.hidden{opacity:0;pointer-events:none;position:absolute}
+  .title{font-family:'Press Start 2P',cursive;font-size:clamp(0.6rem,2vw,0.85rem);color:var(--gold);text-shadow:2px 2px 0 var(--gold-dark);line-height:1.8;margin-top:0.8rem}
+  .subtitle{font-size:clamp(0.45rem,1.3vw,0.58rem);color:var(--red-bright);letter-spacing:0.15em;text-transform:uppercase;margin-top:0.2rem;margin-bottom:1.2rem}
+  .vinyl-container{position:relative;width:clamp(280px,70vw,360px);height:clamp(280px,70vw,360px);margin:1rem auto 0.5rem}
+  .vinyl{width:100%;height:100%;border-radius:50%;
+    background:conic-gradient(from 0deg,#0d0d0d,#1a1a1a 8%,#111 16%,#222 22%,#0d0d0d 30%,#1a1a1a 36%,#151515 44%,#222 50%,#111 58%,#1a1a1a 66%,#0d0d0d 72%,#191919 80%,#222 88%,#0d0d0d 100%);
+    box-shadow:0 0 0 4px #444,0 0 0 7px #111,0 6px 24px rgba(0,0,0,0.6);
+    position:relative;overflow:hidden}
+  .vinyl-shine{position:absolute;top:6%;left:30%;width:35%;height:14%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.08),transparent);border-radius:50%;pointer-events:none}
+  .vinyl-grooves{position:absolute;inset:0;border-radius:50%;pointer-events:none;
+    background:radial-gradient(circle,transparent 28%,rgba(255,255,255,0.03) 28.5%,transparent 29%),
+    radial-gradient(circle,transparent 36%,rgba(255,255,255,0.025) 36.5%,transparent 37%),
+    radial-gradient(circle,transparent 44%,rgba(255,255,255,0.03) 44.5%,transparent 45%)}
+  .vinyl-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:50%;height:50%;border-radius:50%;background:var(--red-deep);border:4px solid var(--gold-dark);overflow:hidden;display:flex;align-items:center;justify-content:center;z-index:2}
+  .vinyl-photo{width:100%;height:100%;object-fit:cover;border-radius:50%;display:none}
+  .vinyl-photo-placeholder{font-family:'Press Start 2P',cursive;font-size:0.45rem;color:var(--gold);opacity:0.5;text-align:center;line-height:1.6;padding:8px}
+  .vinyl-hole { display: none !important; }
+  .music-btn{margin:0.5rem auto;background:var(--red-deep);border:2px solid var(--gold-dark);font-family:'Silkscreen',cursive;font-size:0.5rem;color:var(--gold);padding:5px 14px;cursor:pointer;box-shadow:3px 3px 0 var(--dark);display:flex;align-items:center;gap:6px}
+  .music-btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--dark)}
+  .countdown{display:flex;gap:clamp(0.4rem,2vw,0.7rem);justify-content:center;align-items:center;margin-bottom:1rem}
+  .time-block{background:var(--red-deep);border:3px solid var(--gold-dark);border-radius:4px;padding:clamp(0.6rem,1.8vw,0.9rem) clamp(0.5rem,1.8vw,0.8rem);min-width:clamp(58px,15vw,80px);box-shadow:4px 4px 0 var(--dark),inset 0 -3px 0 rgba(0,0,0,0.2),inset 0 3px 0 rgba(255,255,255,0.05);transition:transform 0.15s steps(2)}
+  .time-block.tick{transform:scale(1.06)}
+  .time-value{font-family:'Press Start 2P',cursive;font-size:clamp(1.2rem,4.5vw,1.8rem);color:var(--gold-light);line-height:1.1;text-shadow:2px 2px 0 var(--dark)}
+  .time-label{font-size:clamp(0.35rem,1vw,0.45rem);color:var(--pink);letter-spacing:0.2em;text-transform:uppercase;margin-top:0.4rem;opacity:0.7}
+  .sep{font-family:'Press Start 2P',cursive;font-size:clamp(0.9rem,3.5vw,1.4rem);color:var(--red-bright);animation:pBlink 0.8s steps(1) infinite}
+  @keyframes pBlink{0%,100%{opacity:1}50%{opacity:0}}
+  .msg{font-size:clamp(0.42rem,1.2vw,0.55rem);color:var(--pink);line-height:2;opacity:0.7;margin-top:0.2rem}
+  .msg b{color:var(--gold)}
+
+  /* ===== BOTTLE ===== */
+  .phase-bottle{display:none;flex-direction:column;align-items:center;gap:1rem}
+  .phase-bottle.active{display:flex;animation:fadeUp 0.5s steps(6)}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+  .bottle-prompt{font-family:'Press Start 2P',cursive;font-size:clamp(0.55rem,1.8vw,0.75rem);color:var(--gold);text-shadow:2px 2px 0 var(--dark)}
+  .bottle-hint{font-size:clamp(0.4rem,1.2vw,0.5rem);color:var(--pink);opacity:0.7}
+  .progress{display:flex;gap:6px;justify-content:center}
+  .progress-dot{width:10px;height:10px;background:var(--red-deep);border:2px solid var(--gold-dark);transition:all 0.2s steps(2)}
+  .progress-dot.filled{background:var(--gold);box-shadow:0 0 8px rgba(245,197,66,0.5);transform:scale(1.2)}
+  .bottle-wrap{position:relative;width:140px;height:380px;margin:0 auto}
+  .bottle-wrap svg{display:block;width:100%;height:100%;overflow:visible}
+  .bottle-wrap.shake svg{animation:bShake 0.2s steps(3);transform-origin:center bottom}
+  @keyframes bShake{0%,100%{transform:rotate(0)}33%{transform:rotate(-1deg)}66%{transform:rotate(1deg)}}
+  #corkGroup{cursor:pointer;transform-box:fill-box;transform-origin:center bottom}
+  #corkGroup:hover{filter:brightness(1.1)}
+  .spill-container{position:fixed;inset:0;z-index:5;pointer-events:none;overflow:hidden}
+  .champagne-flood{position:absolute;top:0;left:-5%;width:110%;height:0%;
+    background:linear-gradient(180deg,transparent 0%,rgba(245,215,110,0.3) 5%,rgba(201,168,76,0.6) 15%,rgba(180,140,50,0.8) 30%,#B08C32 50%,#9A7828 80%,#7A6020 100%);
+    transition:height 3s cubic-bezier(0.25,0.46,0.45,0.94)}
+  .champagne-flood.spilling{height:110%}
+  .foam-bubble{position:fixed;background:var(--gold-light);z-index:8;pointer-events:none}
+
+  /* ===== CELEBRATION ===== */
+  .phase-celebrate{
+    display:none;flex-direction:column;align-items:center;gap:0.8rem;
+    z-index:15;position:relative;
+  }
+  .phase-celebrate.active{display:flex;animation:fadeUp 0.5s steps(6)}
+
+  /* Solid dark panel behind all content so nothing drowns */
+  .cel-panel{
+    background:rgba(8,0,18,0.88);
+    border:3px solid var(--gold);
+    box-shadow:0 0 30px rgba(245,197,66,0.15),inset 0 0 30px rgba(0,0,0,0.3);
+    padding:1.2rem 1.5rem 1rem;
+    display:flex;flex-direction:column;align-items:center;gap:0.6rem;
+    width:clamp(280px,80vw,400px);
+    position:relative;
+  }
+
+  .cel-title{
+    font-family:'Press Start 2P',cursive;
+    font-size:clamp(0.8rem,3.2vw,1.2rem);
+    color:#FFFFFF;
+    text-shadow:3px 3px 0 var(--red),0 0 20px rgba(255,200,50,0.5),0 0 40px rgba(255,100,100,0.3);
+    line-height:2;
+  }
+  .cel-sub{
+    font-family:'Press Start 2P',cursive;
+    font-size:clamp(0.45rem,1.5vw,0.6rem);
+    color:var(--gold);
+    text-shadow:2px 2px 0 var(--dark),0 0 10px rgba(245,197,66,0.4);
+    margin-bottom:0.1rem;
+  }
+
+  /* Dancing horse */
+  .dance-area{position:relative;width:100px;height:80px;margin:0 auto}
+  .dancer{position:absolute;bottom:0;left:50%;transform:translateX(-50%);animation:horseDance 0.8s steps(1) infinite;filter:drop-shadow(0 0 8px rgba(245,197,66,0.4))}
+  @keyframes horseDance{
+    0%{transform:translateX(-50%) translateY(0)}
+    12%{transform:translateX(-50%) translateY(-8px)}
+    25%{transform:translateX(calc(-50% + 10px)) translateY(0) rotate(3deg)}
+    37%{transform:translateX(calc(-50% + 10px)) translateY(-6px) rotate(3deg)}
+    50%{transform:translateX(-50%) translateY(0) scaleX(-1)}
+    62%{transform:translateX(-50%) translateY(-8px) scaleX(-1)}
+    75%{transform:translateX(calc(-50% - 10px)) translateY(0) rotate(-3deg) scaleX(-1)}
+    87%{transform:translateX(calc(-50% - 10px)) translateY(-6px) rotate(-3deg) scaleX(-1)}
+  }
+  .music-note{position:absolute;font-family:'Press Start 2P',cursive;font-size:0.5rem;color:var(--gold-light);pointer-events:none;animation:noteFloat 1.5s steps(6) infinite;opacity:0}
+  @keyframes noteFloat{0%{opacity:0;transform:translateY(0)}20%{opacity:0.9}100%{opacity:0;transform:translateY(-35px) translateX(var(--nx))}}
+
+  /* ===== CLICKABLE ENVELOPE ===== */
+  .envelope-clickable{
+    width:clamp(180px,55vw,240px);
+    cursor:pointer;margin:0.3rem auto;
+    transition:transform 0.15s steps(2),filter 0.15s;
+    position:relative;
+    filter:drop-shadow(0 0 15px rgba(245,197,66,0.3));
+  }
+  .envelope-clickable:hover{transform:scale(1.05);filter:drop-shadow(0 0 25px rgba(245,197,66,0.5))}
+  .envelope-clickable:active{transform:scale(0.97)}
+
+  .env-body{
+    background:linear-gradient(180deg,#A02030 0%,var(--red-deep) 100%);
+    border:4px solid var(--gold);
+    box-shadow:6px 6px 0 var(--dark),inset 0 0 20px rgba(0,0,0,0.2);
+    height:clamp(110px,30vw,150px);
+    position:relative;overflow:hidden;
+  }
+  .env-body::after{
+    content:'';position:absolute;top:0;left:0;right:0;
+    border-left:calc(clamp(180px,55vw,240px)/2) solid transparent;
+    border-right:calc(clamp(180px,55vw,240px)/2) solid transparent;
+    border-top:clamp(55px,15vw,75px) solid var(--red);
+    pointer-events:none;opacity:0.7;
+  }
+
+  .env-flap{
+    width:calc(100% + 8px);margin-left:-4px;height:0;
+    border-left:calc(clamp(180px,55vw,240px)/2 + 4px) solid transparent;
+    border-right:calc(clamp(180px,55vw,240px)/2 + 4px) solid transparent;
+    border-bottom:clamp(45px,13vw,60px) solid var(--red);
+    filter:drop-shadow(0 -1px 0 var(--gold));
+  }
+  .env-seal{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:30px;height:30px;background:var(--gold);border:3px solid var(--gold-dark);
+    border-radius:50%;display:flex;align-items:center;justify-content:center;
+    box-shadow:2px 2px 0 var(--dark),0 0 12px rgba(245,197,66,0.5);z-index:2;
+  }
+  .env-seal-dot{width:10px;height:10px;background:var(--red);border-radius:50%}
+
+  .env-paper-peek{
+    position:absolute;bottom:10px;left:12px;right:12px;
+    height:35px;background:var(--cream);
+    border:2px solid var(--gold-dark);z-index:1;
+    box-shadow:inset 0 2px 0 rgba(200,160,100,0.2);
+  }
+  .env-paper-peek::before{content:'';position:absolute;top:10px;left:8px;right:8px;height:2px;background:repeating-linear-gradient(90deg,rgba(180,140,80,0.4) 0 8px,transparent 8px 14px)}
+  .env-paper-peek::after{content:'';position:absolute;top:20px;left:8px;width:55%;height:2px;background:repeating-linear-gradient(90deg,rgba(180,140,80,0.3) 0 8px,transparent 8px 14px)}
+
+  .tap-hint{
+    font-family:'Press Start 2P',cursive;
+    font-size:clamp(0.38rem,1.1vw,0.48rem);
+    color:var(--gold-light);
+    text-shadow:1px 1px 0 var(--dark);
+    animation:hintPulse 1.2s steps(2) infinite;
+  }
+  @keyframes hintPulse{0%,100%{opacity:0.9}50%{opacity:0.3}}
+
+  /* ===== LETTER OVERLAY ===== */
+  .letter-overlay{
+    display:none;position:fixed;
+    top:5vh;left:50%;transform:translateX(-50%);
+    width:min(92vw,440px);height:90vh;
+    z-index:100;flex-direction:column;
+    animation:letterSlideUp 0.5s steps(8) forwards;
+  }
+  .letter-overlay.open{display:flex}
+  @keyframes letterSlideUp{0%{opacity:0;transform:translateX(-50%) translateY(40px) scale(0.95)}100%{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}}
+
+  .letter-backdrop{display:none;position:fixed;inset:0;z-index:90;background:rgba(5,1,1,0.92);animation:bdIn 0.3s ease forwards}
+  .letter-backdrop.open{display:block}
+  @keyframes bdIn{from{opacity:0}to{opacity:1}}
+
+  .letter-close{
+    position:absolute;top:-12px;right:-12px;z-index:105;
+    width:32px;height:32px;
+    background:var(--red);border:3px solid var(--gold);
+    color:white;font-family:'Press Start 2P',cursive;font-size:0.55rem;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;box-shadow:3px 3px 0 var(--dark);
+  }
+  .letter-close:hover{background:var(--red-bright)}
+  .letter-close:active{transform:translate(1px,1px);box-shadow:1px 1px 0 var(--dark)}
+
+  .letter-env{
+    background:linear-gradient(180deg,#A02030 0%,var(--red-deep) 100%);
+    border:4px solid var(--gold);
+    box-shadow:8px 8px 0 var(--dark),0 0 30px rgba(245,197,66,0.15);
+    display:flex;flex-direction:column;flex:1;min-height:0;position:relative;
+  }
+
+  .letter-flap{
+    width:calc(100% + 8px);margin-left:-4px;flex-shrink:0;height:0;
+    border-left:calc(min(92vw,440px)/2 + 4px) solid transparent;
+    border-right:calc(min(92vw,440px)/2 + 4px) solid transparent;
+    border-bottom:50px solid var(--red);
+    position:relative;
+    filter:drop-shadow(0 -1px 0 var(--gold));
+  }
+  .letter-seal{
+    position:absolute;top:14px;left:50%;transform:translateX(-50%);
+    width:30px;height:30px;background:var(--gold);border:3px solid var(--gold-dark);
+    border-radius:50%;display:flex;align-items:center;justify-content:center;
+    box-shadow:2px 2px 0 var(--dark),0 0 12px rgba(245,197,66,0.4);
+  }
+  .letter-seal-dot{width:10px;height:10px;background:var(--red);border-radius:50%}
+
+  .letter-paper{
+    background:var(--cream);
+    margin:10px;padding:1.5rem 1.2rem 2rem;
+    flex:1;overflow-y:auto;position:relative;
+    border:2px solid var(--gold-dark);
+    background-image:repeating-linear-gradient(0deg,transparent,transparent 22px,rgba(200,160,100,0.12) 22px,rgba(200,160,100,0.12) 23px);
+    background-position:0 1.5rem;
+    box-shadow:inset 0 0 15px rgba(180,140,80,0.08);
+  }
+  .letter-paper::-webkit-scrollbar{width:6px}
+  .letter-paper::-webkit-scrollbar-track{background:rgba(200,160,100,0.1)}
+  .letter-paper::-webkit-scrollbar-thumb{background:var(--red-deep);border:1px solid var(--gold-dark)}
+  .letter-paper::before{content:'';position:absolute;top:0;bottom:0;left:26px;width:2px;background:rgba(204,41,54,0.15);pointer-events:none}
+
+  .l-greeting{font-family:'Press Start 2P',cursive;font-size:clamp(0.5rem,1.6vw,0.65rem);color:var(--red);text-align:left;margin-bottom:1.2rem;padding-left:22px;line-height:2.5}
+  .l-body{font-family:'Silkscreen',cursive;font-size:clamp(0.55rem,1.6vw,0.7rem);color:#2A1008;text-align:left;line-height:2.8;padding-left:22px;padding-right:8px}
+  .l-sign{font-family:'Press Start 2P',cursive;font-size:clamp(0.45rem,1.2vw,0.55rem);color:var(--red-deep);text-align:right;margin-top:1.5rem;padding-right:8px;line-height:2.5}
+  .l-footer{display:flex;align-items:center;justify-content:center;gap:4px;margin-top:1.5rem}
+  .lf-dot{width:4px;height:4px;background:var(--red)}
+  .lf-line{height:2px;width:30px;background:repeating-linear-gradient(90deg,var(--red) 0 3px,transparent 3px 6px)}
+
+  /* Treasure chest */
+  .chest-wrap{
+    cursor:pointer;margin:0.5rem auto 0;
+    transition:transform 0.15s steps(2);
+    filter:drop-shadow(0 0 10px rgba(245,197,66,0.3));
+    animation:chestBob 1.5s steps(2) infinite;
+  }
+  .chest-wrap:hover{transform:scale(1.08);filter:drop-shadow(0 0 20px rgba(245,197,66,0.5))}
+  .chest-wrap:active{transform:scale(0.95)}
+  @keyframes chestBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+
+  /* Key modal */
+  .key-backdrop{display:none;position:fixed;inset:0;z-index:200;background:rgba(5,1,1,0.85)}
+  .key-backdrop.open{display:block}
+  .key-modal{
+    display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+    z-index:210;background:var(--red-bg);
+    border:3px solid var(--gold);box-shadow:6px 6px 0 var(--dark);
+    padding:1.2rem 1.5rem;text-align:center;width:min(85vw,320px);
+  }
+  .key-modal.open{display:block;animation:fadeUp 0.3s steps(5)}
+  .key-title{font-family:'Press Start 2P',cursive;font-size:clamp(0.42rem,1.3vw,0.55rem);color:var(--gold);margin-bottom:0.6rem;line-height:1.8}
+  .key-input{
+    width:100%;padding:8px 10px;
+    background:var(--dark);border:2px solid var(--gold-dark);
+    color:var(--gold-light);font-family:'Silkscreen',cursive;font-size:0.55rem;
+    text-align:center;letter-spacing:0.1em;outline:none;
+  }
+  .key-input:focus{border-color:var(--gold);box-shadow:0 0 8px rgba(245,197,66,0.3)}
+  .key-error{font-family:'Silkscreen',cursive;font-size:0.42rem;color:var(--red-bright);margin-top:0.4rem;min-height:0.8rem}
+  @keyframes keyShake{0%,100%{transform:translate(-50%,-50%)}25%{transform:translate(calc(-50% + 8px),-50%)}50%{transform:translate(calc(-50% - 8px),-50%)}75%{transform:translate(calc(-50% + 4px),-50%)}}
+
+  /* Cheque overlay */
+  .cheque-backdrop{display:none;position:fixed;inset:0;z-index:200;background:rgba(5,1,1,0.9)}
+  .cheque-backdrop.open{display:block}
+  .cheque-overlay{
+    display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+    z-index:210;width:min(92vw,420px);
+  }
+  .cheque-overlay.open{display:block;animation:fadeUp 0.5s steps(6)}
+  .cheque{
+    background:var(--cream);border:4px solid var(--gold);
+    box-shadow:6px 6px 0 var(--dark);padding:1.2rem 1rem;position:relative;
+    background-image:
+      radial-gradient(ellipse at 20% 50%,rgba(200,160,100,0.06) 0%,transparent 50%),
+      radial-gradient(ellipse at 80% 50%,rgba(200,160,100,0.06) 0%,transparent 50%),
+      repeating-linear-gradient(45deg,transparent,transparent 8px,rgba(200,160,100,0.03) 8px,rgba(200,160,100,0.03) 9px);
+  }
+  .cheque-header{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid var(--gold-dark);padding-bottom:0.5rem;margin-bottom:0.6rem}
+  .cheque-bank{font-family:'Press Start 2P',cursive;font-size:clamp(0.38rem,1.2vw,0.5rem);color:var(--red-deep);line-height:2}
+  .cheque-bank-sub{font-family:'Silkscreen',cursive;font-size:clamp(0.3rem,0.9vw,0.38rem);color:var(--gold-dark)}
+  .cheque-number{font-family:'Silkscreen',cursive;font-size:0.35rem;color:#999}
+  .cheque-row{display:flex;align-items:baseline;margin-bottom:0.5rem}
+  .cheque-label{font-family:'Silkscreen',cursive;font-size:clamp(0.32rem,0.9vw,0.38rem);color:#888;text-transform:uppercase;flex-shrink:0;margin-right:6px}
+  .cheque-value{font-family:'Press Start 2P',cursive;font-size:clamp(0.38rem,1.2vw,0.48rem);color:var(--dark);border-bottom:1px dashed #ccc;flex:1;text-align:left;padding-left:6px;line-height:2.2}
+  .cheque-amount-box{background:var(--gold-light);border:3px solid var(--gold);padding:0.5rem 0.6rem;text-align:center;margin:0.6rem 0;box-shadow:inset 0 0 10px rgba(200,160,50,0.15)}
+  .cheque-currency{font-family:'Silkscreen',cursive;font-size:clamp(0.32rem,0.9vw,0.38rem);color:var(--gold-dark)}
+  .cheque-amount{font-family:'Press Start 2P',cursive;font-size:clamp(0.65rem,2.2vw,0.9rem);color:var(--red-deep);text-shadow:1px 1px 0 rgba(0,0,0,0.1);line-height:2}
+  .cheque-amount-words{font-family:'Silkscreen',cursive;font-size:clamp(0.3rem,0.85vw,0.36rem);color:#666;margin-top:0.2rem}
+  .cheque-footer{display:flex;justify-content:space-between;align-items:flex-end;margin-top:0.6rem;padding-top:0.5rem;border-top:2px solid var(--gold-dark)}
+  .cheque-stamp{width:44px;height:44px;border:3px solid var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;transform:rotate(-12deg);opacity:0.6}
+  .cheque-stamp-text{font-family:'Press Start 2P',cursive;font-size:0.2rem;color:var(--red);text-align:center;line-height:1.4}
+  .cheque-sig{text-align:right}
+  .cheque-sig-line{width:90px;height:0;border-bottom:1px solid #999;margin-left:auto;margin-bottom:0.2rem}
+  .cheque-sig-name{font-family:'Press Start 2P',cursive;font-size:clamp(0.32rem,1vw,0.42rem);color:var(--dark);font-style:italic}
+  .cheque-close{position:absolute;top:-14px;right:-14px;width:32px;height:32px;background:var(--red);border:3px solid var(--gold);color:white;font-family:'Press Start 2P',cursive;font-size:0.55rem;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:3px 3px 0 var(--dark);z-index:5}
+  .cheque-close:hover{background:var(--red-bright)}
+  .cheque-close:active{transform:translate(1px,1px);box-shadow:1px 1px 0 var(--dark)}
+  .cheque-continue{
+    display:block;width:100%;margin-top:0.8rem;
+    font-family:'Press Start 2P',cursive;font-size:clamp(0.4rem,1.2vw,0.52rem);
+    color:var(--dark);background:var(--gold);
+    border:3px solid var(--gold-dark);
+    padding:10px 14px;cursor:pointer;
+    box-shadow:3px 3px 0 var(--dark);
+    text-align:center;
+    animation:btnPulse 2s steps(2) infinite;
+  }
+  .cheque-continue:hover{background:var(--gold-light)}
+  .cheque-continue:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--dark)}
+  @keyframes btnPulse{0%,100%{box-shadow:3px 3px 0 var(--dark)}50%{box-shadow:3px 3px 0 var(--dark),0 0 12px rgba(245,197,66,0.4)}}
+
+  .confetti{position:fixed;z-index:4;pointer-events:none;animation:confettiFall linear forwards}
+  @keyframes confettiFall{0%{transform:translateY(-10vh);opacity:1}100%{transform:translateY(110vh);opacity:0}}
+
+  .test-btn{position:fixed;bottom:14px;right:14px;z-index:130;background:var(--red-deep);border:2px solid var(--gold-dark);font-family:'Silkscreen',cursive;font-size:0.5rem;color:var(--gold);padding:5px 10px;cursor:pointer;box-shadow:3px 3px 0 var(--dark)}
+  .test-btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--dark)}
+
+  /* Password modal */
+  .pw-backdrop{display:none;position:fixed;inset:0;z-index:200;background:rgba(5,1,1,0.85)}
+  .pw-backdrop.open{display:block}
+  .pw-modal{
+    display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+    z-index:210;background:var(--red-bg);
+    border:3px solid var(--gold);box-shadow:6px 6px 0 var(--dark);
+    padding:1.2rem 1.5rem;text-align:center;
+    width:min(85vw,320px);
+  }
+  .pw-modal.open{display:block;animation:fadeUp 0.3s steps(5)}
+  .pw-title{font-family:'Press Start 2P',cursive;font-size:clamp(0.45rem,1.4vw,0.6rem);color:var(--gold);margin-bottom:1rem}
+  .pw-input{
+    width:100%;padding:8px 10px;
+    background:var(--dark);border:2px solid var(--gold-dark);
+    color:var(--gold-light);font-family:'Silkscreen',cursive;font-size:0.6rem;
+    text-align:center;letter-spacing:0.15em;outline:none;
+  }
+  .pw-input:focus{border-color:var(--gold);box-shadow:0 0 8px rgba(245,197,66,0.3)}
+  .pw-error{font-family:'Silkscreen',cursive;font-size:0.45rem;color:var(--red-bright);margin-top:0.5rem;min-height:1rem}
+  .pw-btns{display:flex;gap:8px;margin-top:0.8rem;justify-content:center}
+  .pw-btn{
+    font-family:'Silkscreen',cursive;font-size:0.45rem;padding:6px 14px;
+    border:2px solid var(--gold-dark);cursor:pointer;
+    box-shadow:3px 3px 0 var(--dark);
+  }
+  .pw-btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--dark)}
+  .pw-cancel{background:var(--red-deep);color:var(--pink)}
+  .pw-submit{background:var(--gold-dark);color:var(--dark)}
+
+  /* Inline password reveal */
+  .pw-inline{
+    display:none;margin-top:1rem;
+    text-align:center;
+    animation:pixelReveal 0.4s steps(5) forwards;
+  }
+  .pw-inline.show{display:block}
+  .pw-inline-label{
+    font-family:'Press Start 2P',cursive;
+    font-size:clamp(0.38rem,1.1vw,0.48rem);
+    color:white;margin-bottom:0.5rem;line-height:2;
+  }
+  .pw-inline-code{
+    display:inline-block;
+    font-family:'Press Start 2P',cursive;
+    font-size:clamp(0.5rem,1.8vw,0.7rem);
+    color:var(--gold-light);
+    background:var(--dark);border:2px solid var(--gold-dark);
+    padding:8px 14px;
+    letter-spacing:0.1em;
+    text-shadow:0 0 10px rgba(245,197,66,0.4);
+    user-select:all;
+    animation:pwGlow 1.5s ease-in-out infinite;
+  }
+  @keyframes pwGlow{0%,100%{box-shadow:0 0 6px rgba(245,197,66,0.2)}50%{box-shadow:0 0 16px rgba(245,197,66,0.5)}}
+  .pw-inline-hint{
+    font-family:'Silkscreen',cursive;
+    font-size:0.38rem;color:var(--pink);
+    margin-top:0.4rem;opacity:0.6;
+  }
+  @keyframes pwShake{0%,100%{transform:translate(-50%,-50%)}25%{transform:translate(calc(-50% + 8px),-50%)}50%{transform:translate(calc(-50% - 8px),-50%)}75%{transform:translate(calc(-50% + 4px),-50%)}}
+</style>
+</head>
+<body>
+
+<div class="pixel-bg"></div>
+<div class="lanterns" id="lanterns"></div>
+<div id="starsBox"></div>
+<canvas id="fireworks"></canvas>
+<audio id="bgMusic" loop preload="auto"><source src="music.mp3" type="audio/mpeg"></audio>
+
+<button class="test-btn" id="unlockBtn">UNLOCK</button>
+
+<!-- Password prompt -->
+<div class="pw-backdrop" id="pwBackdrop"></div>
+<div class="pw-modal" id="pwModal">
+  <div class="pw-title">ENTER PASSWORD</div>
+  <input type="password" class="pw-input" id="pwInput" placeholder="password..." autocomplete="off">
+  <div class="pw-error" id="pwError"></div>
+  <div class="pw-btns">
+    <button class="pw-btn pw-cancel" id="pwCancel">CANCEL</button>
+    <button class="pw-btn pw-submit" id="pwSubmit">UNLOCK</button>
+  </div>
+</div>
+
+
+<div class="spill-container"><div class="champagne-flood" id="champagneFlood"></div></div>
+
+<div class="container">
+
+  <!-- COUNTDOWN -->
+  <div class="phase-countdown" id="phaseCountdown">
+    <div class="px-border anim-in" style="animation-delay:0.1s"><div class="px-line"></div><div class="px-dot"></div><div class="px-dot"></div><div class="px-dot"></div><div class="px-line"></div></div>
+    <div class="vinyl-container anim-in" style="animation-delay:0.25s">
+      <div class="vinyl" id="vinyl">
+        <div class="vinyl-shine"></div>
+        <div class="vinyl-grooves"></div>
+        <div class="vinyl-center">
+          <img class="vinyl-photo" id="vinylPhoto" src="safari.jpeg" alt="iu">
+          <div class="vinyl-photo-placeholder" id="vinylPlaceholder">YOUR<br>PHOTO<br>HERE</div>
+        </div><div class="vinyl-hole"></div>
+      </div>
+    </div>
+    <button class="music-btn anim-in" style="animation-delay:0.35s" id="musicBtn"><span id="musicIcon">&#9654;</span> PLAY</button>
+    <div class="title anim-in" style="animation-delay:0.5s">LUNAR NEW YEAR</div>
+    <div class="subtitle anim-in" style="animation-delay:0.6s">To Hà Linh - 2026</div>
+    <div class="countdown anim-in" style="animation-delay:0.7s">
+      <div class="time-block" id="hBlock"><div class="time-value" id="hours">00</div><div class="time-label">HRS</div></div>
+      <div class="sep">:</div>
+      <div class="time-block" id="mBlock"><div class="time-value" id="minutes">00</div><div class="time-label">MIN</div></div>
+      <div class="sep">:</div>
+      <div class="time-block" id="sBlock"><div class="time-value" id="seconds">00</div><div class="time-label">SEC</div></div>
+    </div>
+    <div class="px-border anim-in" style="animation-delay:0.85s"><div class="px-line"></div><div class="px-dot"></div><div class="px-dot"></div><div class="px-dot"></div><div class="px-line"></div></div>
+    <div class="msg anim-in" style="animation-delay:0.95s">Wishing you <b>love</b>, <b>happiness</b> & <b>a good turtle </b></div>
+    <div class="pw-inline" id="pwInline">
+      <div class="pw-inline-label">THE PASSWORD IS</div>
+      <div class="pw-inline-code" id="pwInlineCode"></div>
+      <div class="pw-inline-hint">use the UNLOCK button below</div>
+    </div>
+  </div>
+
+  <!-- BOTTLE -->
+  <div class="phase-bottle" id="phaseBottle">
+    <div class="bottle-prompt">OPEN THE CORK!</div>
+    <div class="bottle-hint">tap it 10 times</div>
+    <div class="progress" id="progress"></div>
+    <div class="bottle-wrap" id="bottleWrap">
+      <svg viewBox="0 0 140 380" xmlns="http://www.w3.org/2000/svg" style="image-rendering:auto">
+        <defs>
+          <linearGradient id="bGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#1A3A25"/><stop offset="25%" stop-color="#28583A"/><stop offset="50%" stop-color="#357A4E"/><stop offset="75%" stop-color="#28583A"/><stop offset="100%" stop-color="#1A3A25"/></linearGradient>
+          <linearGradient id="nGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#1E4028"/><stop offset="40%" stop-color="#2C6040"/><stop offset="100%" stop-color="#1E4028"/></linearGradient>
+          <linearGradient id="foilGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#F5D76E"/><stop offset="50%" stop-color="#D4A05A"/><stop offset="100%" stop-color="#B8860B"/></linearGradient>
+          <linearGradient id="corkGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#A07040"/><stop offset="30%" stop-color="#C49060"/><stop offset="70%" stop-color="#B88050"/><stop offset="100%" stop-color="#906838"/></linearGradient>
+          <linearGradient id="hiGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="rgba(255,255,255,0.1)"/><stop offset="100%" stop-color="rgba(255,255,255,0)"/></linearGradient>
+        </defs>
+        <g id="bottleBody">
+          <rect x="56" y="60" width="28" height="70" fill="url(#nGrad)"/><rect x="52" y="56" width="36" height="8" rx="4" fill="url(#nGrad)" stroke="#15301E" stroke-width="0.5"/>
+          <path d="M56,130 C56,130 56,158 18,175 L122,175 C84,158 84,130 84,130 Z" fill="url(#bGrad)"/>
+          <rect x="14" y="175" width="112" height="170" rx="6" fill="url(#bGrad)"/>
+          <rect x="11" y="340" width="118" height="18" rx="8" fill="#15301E"/><ellipse cx="70" cy="358" rx="44" ry="5" fill="#0E2516"/>
+          <rect x="28" y="186" width="10" height="100" rx="5" fill="url(#hiGrad)" opacity="0.7"/>
+          <rect x="28" y="215" width="84" height="85" rx="5" fill="#FFF3D4" opacity="0.95"/><rect x="28" y="215" width="84" height="6" rx="2" fill="var(--red)"/>
+          <text x="70" y="250" text-anchor="middle" font-family="'Press Start 2P',cursive" font-size="11" fill="#5C3D2E">2026</text>
+          <text x="70" y="274" text-anchor="middle" font-family="'Silkscreen',cursive" font-size="7" font-weight="700" fill="var(--red)">HORSE</text>
+          <text x="70" y="292" text-anchor="middle" font-family="'Silkscreen',cursive" font-size="5.5" letter-spacing="1.5" fill="#8B6B5A">LUNAR NEW YEAR</text>
+        </g>
+        <g id="corkGroup">
+          <rect x="57" y="22" width="26" height="34" rx="4" fill="url(#corkGrad)"/>
+          <line x1="60" y1="30" x2="80" y2="30" stroke="rgba(0,0,0,0.07)" stroke-width="0.8"/><line x1="60" y1="36" x2="80" y2="36" stroke="rgba(0,0,0,0.06)" stroke-width="0.8"/>
+          <line x1="60" y1="42" x2="80" y2="42" stroke="rgba(0,0,0,0.07)" stroke-width="0.8"/><line x1="60" y1="48" x2="80" y2="48" stroke="rgba(0,0,0,0.06)" stroke-width="0.8"/>
+          <rect x="50" y="10" width="40" height="16" rx="6" fill="url(#foilGrad)"/><rect x="53" y="22" width="34" height="4" rx="1.5" fill="rgba(0,0,0,0.1)"/>
+          <line x1="56" y1="26" x2="57" y2="54" stroke="#AAA" stroke-width="0.8" opacity="0.4"/><line x1="84" y1="26" x2="83" y2="54" stroke="#AAA" stroke-width="0.8" opacity="0.4"/>
+          <line x1="70" y1="26" x2="70" y2="54" stroke="#AAA" stroke-width="0.7" opacity="0.3"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <!-- CELEBRATION -->
+  <div class="phase-celebrate" id="phaseCelebrate">
+    <div class="cel-panel">
+    <div class="cel-title">HAPPY NEW YEAR!</div>
+    <div class="cel-sub">A letter for my dearest</div>
+    <div class="dance-area">
+      <div class="dancer">
+        <svg viewBox="0 0 16 16" width="52" height="52" style="image-rendering:pixelated">
+          <rect x="10" y="1" width="1" height="1" fill="var(--gold)"/><rect x="11" y="1" width="1" height="1" fill="var(--gold)"/><rect x="9" y="1" width="1" height="1" fill="var(--gold-dark)"/>
+          <rect x="9" y="2" width="1" height="1" fill="var(--gold-dark)"/><rect x="10" y="2" width="1" height="1" fill="var(--red-bright)"/><rect x="11" y="2" width="1" height="1" fill="var(--red-bright)"/><rect x="12" y="2" width="1" height="1" fill="var(--gold-dark)"/>
+          <rect x="9" y="3" width="1" height="1" fill="var(--red)"/><rect x="10" y="3" width="1" height="1" fill="var(--red-bright)"/><rect x="11" y="3" width="1" height="1" fill="var(--cream)"/><rect x="12" y="3" width="1" height="1" fill="var(--red)"/>
+          <rect x="8" y="4" width="1" height="1" fill="var(--red-deep)"/><rect x="9" y="4" width="1" height="1" fill="var(--red)"/><rect x="10" y="4" width="1" height="1" fill="var(--red-bright)"/><rect x="11" y="4" width="1" height="1" fill="var(--red)"/>
+          <rect x="7" y="5" width="1" height="1" fill="var(--red-deep)"/><rect x="8" y="5" width="1" height="1" fill="var(--red)"/><rect x="9" y="5" width="1" height="1" fill="var(--red-bright)"/><rect x="10" y="5" width="1" height="1" fill="var(--red)"/>
+          <rect x="6" y="6" width="1" height="1" fill="var(--gold-dark)"/><rect x="7" y="6" width="1" height="1" fill="var(--red)"/><rect x="8" y="6" width="1" height="1" fill="var(--red-bright)"/><rect x="9" y="6" width="1" height="1" fill="var(--red)"/><rect x="10" y="6" width="1" height="1" fill="var(--red-deep)"/>
+          <rect x="5" y="7" width="1" height="1" fill="var(--gold)"/><rect x="6" y="7" width="1" height="1" fill="var(--red)"/><rect x="7" y="7" width="1" height="1" fill="var(--red-bright)"/><rect x="8" y="7" width="1" height="1" fill="var(--red-bright)"/><rect x="9" y="7" width="1" height="1" fill="var(--red)"/>
+          <rect x="5" y="8" width="1" height="1" fill="var(--gold-dark)"/><rect x="6" y="8" width="1" height="1" fill="var(--red-bright)"/><rect x="7" y="8" width="1" height="1" fill="var(--red-bright)"/><rect x="8" y="8" width="1" height="1" fill="var(--red)"/><rect x="9" y="8" width="1" height="1" fill="var(--red-deep)"/>
+          <rect x="5" y="9" width="1" height="1" fill="var(--red)"/><rect x="6" y="9" width="1" height="1" fill="var(--red-bright)"/><rect x="7" y="9" width="1" height="1" fill="var(--red)"/><rect x="8" y="9" width="1" height="1" fill="var(--red-deep)"/>
+          <rect x="5" y="10" width="1" height="1" fill="var(--red-deep)"/><rect x="6" y="10" width="1" height="1" fill="var(--red)"/><rect x="7" y="10" width="1" height="1" fill="var(--red)"/><rect x="8" y="10" width="1" height="1" fill="var(--red-deep)"/>
+          <rect x="5" y="11" width="1" height="1" fill="var(--red-deep)"/><rect x="6" y="11" width="1" height="1" fill="var(--red)"/><rect x="7" y="11" width="1" height="1" fill="var(--red)"/><rect x="8" y="11" width="1" height="1" fill="var(--red-deep)"/>
+          <rect x="5" y="12" width="1" height="1" fill="var(--red-deep)"/><rect x="8" y="12" width="1" height="1" fill="var(--red-deep)"/>
+          <rect x="5" y="13" width="1" height="1" fill="var(--gold-dark)"/><rect x="8" y="13" width="1" height="1" fill="var(--gold-dark)"/>
+          <rect x="3" y="7" width="1" height="1" fill="var(--gold)"/><rect x="4" y="7" width="1" height="1" fill="var(--gold)"/>
+          <rect x="2" y="8" width="1" height="1" fill="var(--gold-dark)"/><rect x="3" y="8" width="1" height="1" fill="var(--gold)"/><rect x="4" y="8" width="1" height="1" fill="var(--gold-dark)"/>
+          <rect x="3" y="9" width="1" height="1" fill="var(--gold-dark)"/>
+        </svg>
+      </div>
+      <div class="music-note" style="left:15%;top:15%;animation-delay:0s;--nx:12px">*</div>
+      <div class="music-note" style="left:75%;top:10%;animation-delay:0.5s;--nx:-10px">*</div>
+      <div class="music-note" style="left:45%;top:5%;animation-delay:1s;--nx:6px">*</div>
+    </div>
+    <div class="envelope-clickable" id="envelopeBtn">
+      <div class="env-flap"><div class="env-seal"><div class="env-seal-dot"></div></div></div>
+      <div class="env-body"><div class="env-paper-peek"></div></div>
+    </div>
+    <div class="tap-hint">TAP TO READ LETTER</div>
+
+    <!-- TREASURE CHEST -->
+    <div class="chest-wrap" id="chestBtn">
+      <svg viewBox="0 0 20 16" width="72" height="58" style="image-rendering:pixelated">
+        <!-- Lid -->
+        <rect x="1" y="0" width="18" height="2" fill="var(--gold-dark)"/>
+        <rect x="0" y="2" width="20" height="3" fill="var(--gold)"/>
+        <rect x="8" y="1" width="4" height="3" fill="var(--gold-light)"/>
+        <rect x="9" y="2" width="2" height="1" fill="#FFF"/>
+        <!-- Lock -->
+        <rect x="9" y="4" width="2" height="2" fill="var(--gold-light)"/>
+        <rect x="8" y="5" width="4" height="3" fill="var(--gold)"/>
+        <rect x="9" y="6" width="2" height="1" fill="var(--dark)"/>
+        <!-- Body -->
+        <rect x="0" y="5" width="20" height="9" fill="var(--red-deep)"/>
+        <rect x="1" y="5" width="18" height="9" fill="var(--red)"/>
+        <rect x="0" y="5" width="20" height="1" fill="var(--gold-dark)"/>
+        <rect x="0" y="13" width="20" height="1" fill="var(--gold-dark)"/>
+        <rect x="0" y="5" width="1" height="9" fill="var(--gold-dark)"/>
+        <rect x="19" y="5" width="1" height="9" fill="var(--gold-dark)"/>
+        <!-- Metal bands -->
+        <rect x="0" y="9" width="20" height="1" fill="var(--gold-dark)"/>
+        <!-- Corners -->
+        <rect x="1" y="6" width="2" height="2" fill="var(--gold-dark)"/>
+        <rect x="17" y="6" width="2" height="2" fill="var(--gold-dark)"/>
+        <rect x="1" y="11" width="2" height="2" fill="var(--gold-dark)"/>
+        <rect x="17" y="11" width="2" height="2" fill="var(--gold-dark)"/>
+        <!-- Lock plate -->
+        <rect x="8" y="5" width="4" height="3" fill="var(--gold)"/>
+        <rect x="9" y="6" width="2" height="1" fill="var(--dark)"/>
+        <!-- Feet -->
+        <rect x="1" y="14" width="2" height="2" fill="var(--gold-dark)"/>
+        <rect x="17" y="14" width="2" height="2" fill="var(--gold-dark)"/>
+      </svg>
+    </div>
+    <div class="tap-hint">TAP CHEST TO USE KEY</div>
+
+    </div><!-- end cel-panel -->
+  </div>
+</div>
+
+<!-- LETTER OVERLAY -->
+<div class="letter-backdrop" id="letterBackdrop"></div>
+<div class="letter-overlay" id="letterOverlay">
+  <div class="letter-close" id="letterClose">X</div>
+  <div class="letter-env">
+    <div class="letter-flap"><div class="letter-seal"><div class="letter-seal-dot"></div></div></div>
+    <div class="letter-paper">
+      <!--
+        =============================================
+         EDIT YOUR LETTER HERE
+        =============================================
+      -->
+      <div class="l-greeting">Dear Friend,</div>
+      <div class="l-body">
+        Your message goes here. Write
+        anything you want to say for
+        Lunar New Year 2026.
+        <br><br>
+        This is a placeholder text.
+        Replace it with your own words,
+        wishes, memories, and dreams.
+        <br><br>
+        Make it as long as you want.
+        The letter scrolls so you can
+        write as much as your heart
+        desires.
+        <br><br>
+        Add stories, inside jokes,
+        gratitude, or anything that
+        makes this moment special
+        between you and the reader.
+        <br><br>
+        You can keep adding more and
+        more paragraphs here...
+      </div>
+      <div class="l-sign">With love,<br>Your Name</div>
+      <!--
+        =============================================
+         END OF EDITABLE LETTER
+        =============================================
+      -->
+      <div class="l-footer"><div class="lf-line"></div><div class="lf-dot"></div><div class="lf-dot"></div><div class="lf-dot"></div><div class="lf-line"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Key modal for chest -->
+<div class="key-backdrop" id="keyBackdrop"></div>
+<div class="key-modal" id="keyModal">
+  <div class="key-title">ENTER THE KEY</div>
+  <input type="password" class="key-input" id="keyInput" placeholder="type the key..." autocomplete="off">
+  <div class="key-error" id="keyError"></div>
+  <div class="pw-btns">
+    <button class="pw-btn pw-cancel" id="keyCancel">CANCEL</button>
+    <button class="pw-btn pw-submit" id="keySubmit">OPEN</button>
+  </div>
+</div>
+
+<!-- Cheque overlay -->
+<div class="cheque-backdrop" id="chequeBackdrop"></div>
+<div class="cheque-overlay" id="chequeOverlay">
+  <div class="cheque">
+    <div class="cheque-close" id="chequeClose">X</div>
+    <div class="cheque-header">
+      <div>
+        <div class="cheque-bank">
+          <svg viewBox="0 0 10 8" width="16" height="13" style="image-rendering:pixelated;vertical-align:middle;margin-right:2px"><rect x="3" y="0" width="4" height="1" fill="#2a7a2a"/><rect x="2" y="1" width="6" height="1" fill="#3a9a3a"/><rect x="1" y="2" width="8" height="1" fill="#3a9a3a"/><rect x="0" y="3" width="10" height="3" fill="#2a7a2a"/><rect x="4" y="3" width="2" height="2" fill="#5ab85a"/><rect x="1" y="6" width="3" height="1" fill="#2a7a2a"/><rect x="6" y="6" width="3" height="1" fill="#2a7a2a"/><rect x="2" y="7" width="1" height="1" fill="#1a5a1a"/><rect x="7" y="7" width="1" height="1" fill="#1a5a1a"/></svg>
+          NGAN HANG RUA
+        </div>
+        <div class="cheque-bank-sub">Turtle Bank International</div>
+      </div>
+      <div class="cheque-number">No. 2026-0217</div>
+    </div>
+    <div class="cheque-row">
+      <div class="cheque-label">Pay to:</div>
+      <div class="cheque-value">Bearer of this cheque</div>
+    </div>
+    <div class="cheque-row">
+      <div class="cheque-label">Date:</div>
+      <div class="cheque-value">17 / 02 / 2026</div>
+    </div>
+    <div class="cheque-amount-box">
+      <div class="cheque-currency">VND - Vietnamese Dong</div>
+      <div class="cheque-amount">500,000</div>
+      <div class="cheque-amount-words">Five Hundred Thousand Dong</div>
+    </div>
+    <div class="cheque-row">
+      <div class="cheque-label">Memo:</div>
+      <div class="cheque-value">Happy Lunar New Year 2026!</div>
+    </div>
+    <div class="cheque-footer">
+      <div class="cheque-stamp">
+        <div class="cheque-stamp-text">NGAN<br>HANG<br>RUA</div>
+      </div>
+      <div class="cheque-sig">
+        <div class="cheque-sig-line"></div>
+        <div class="cheque-sig-name">Minh Quân</div>
+      </div>
+    </div>
+    <button class="cheque-continue" id="chequeContinue">CONTINUE >></button>
+  </div>
+</div>
+
+<!-- SECOND LETTER OVERLAY -->
+<div class="letter-backdrop" id="letter2Backdrop"></div>
+<div class="letter-overlay" id="letter2Overlay">
+  <div class="letter-close" id="letter2Close">X</div>
+  <div class="letter-env">
+    <div class="letter-flap"><div class="letter-seal"><div class="letter-seal-dot"></div></div></div>
+    <div class="letter-paper">
+      <!--
+        =============================================
+         EDIT YOUR SECOND LETTER HERE
+        =============================================
+      -->
+      <div class="l-greeting">Dear Friend,</div>
+      <div class="l-body">
+        This is your second letter.
+        Write anything you want here.
+        <br><br>
+        Maybe a deeper message,
+        a secret note, or something
+        special that only the person
+        who opened the chest deserves
+        to read.
+        <br><br>
+        Replace this placeholder
+        with your own words.
+      </div>
+      <div class="l-sign">With love,<br>Your Name</div>
+      <!--
+        =============================================
+         END OF SECOND LETTER
+        =============================================
+      -->
+      <div class="l-footer"><div class="lf-line"></div><div class="lf-dot"></div><div class="lf-dot"></div><div class="lf-dot"></div><div class="lf-line"></div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Stars
+  for(let i=0;i<30;i++){const s=document.createElement('div');s.className='p-star';s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';s.style.animationDuration=(1+Math.random()*3)+'s';s.style.animationDelay=Math.random()*3+'s';if(Math.random()>0.7){s.style.width='6px';s.style.height='6px';s.style.background='var(--red-bright)'}document.getElementById('starsBox').appendChild(s)}
+
+  // Lanterns
+  const lanternsEl=document.getElementById('lanterns');
+  function mkL(){const l=document.createElement('div');l.className='p-lantern';l.style.left=Math.random()*100+'%';l.style.animationDuration=(18+Math.random()*15)+'s';l.style.animationDelay=Math.random()*2+'s';l.innerHTML=`<svg viewBox="0 0 8 12" width="20" height="30" style="image-rendering:pixelated"><rect x="3" y="0" width="2" height="1" fill="var(--gold)"/><rect x="2" y="1" width="4" height="1" fill="var(--gold-dark)"/><rect x="1" y="2" width="6" height="1" fill="var(--red-bright)"/><rect x="0" y="3" width="8" height="1" fill="var(--red)"/><rect x="0" y="4" width="8" height="1" fill="var(--red-bright)"/><rect x="0" y="5" width="8" height="1" fill="var(--red)"/><rect x="0" y="6" width="8" height="1" fill="var(--red-bright)"/><rect x="0" y="7" width="8" height="1" fill="var(--red)"/><rect x="1" y="8" width="6" height="1" fill="var(--red-deep)"/><rect x="2" y="9" width="4" height="1" fill="var(--red-deep)"/><rect x="3" y="10" width="2" height="1" fill="var(--gold-dark)"/><rect x="3" y="11" width="1" height="1" fill="var(--gold)"/></svg>`;lanternsEl.appendChild(l);setTimeout(()=>l.remove(),38000)}
+  var lanternInterval=setInterval(mkL,3000);for(let i=0;i<4;i++)setTimeout(mkL,i*600);
+
+  // Music
+  const bgMusic=document.getElementById('bgMusic'),vinyl=document.getElementById('vinyl'),musicBtn=document.getElementById('musicBtn'),musicIcon=document.getElementById('musicIcon'),vinylPhoto=document.getElementById('vinylPhoto'),vinylPlaceholder=document.getElementById('vinylPlaceholder');
+  let playing=false;
+  if(vinylPhoto.src&&!vinylPhoto.src.endsWith('/'))vinylPhoto.style.display='block',vinylPlaceholder.style.display='none';
+  vinylPhoto.addEventListener('load',()=>{vinylPhoto.style.display='block';vinylPlaceholder.style.display='none'});
+
+  // JS-driven vinyl rotation
+  let vinylAngle=0, vinylSpinning=false, vinylRAF=null;
+  var vinylCenter=document.querySelector('.vinyl-center');
+  function spinVinyl(){
+    if(!vinylSpinning)return;
+    vinylAngle=(vinylAngle+1.5)%360;
+    vinyl.style.transform='rotate('+vinylAngle+'deg)';
+    vinylCenter.style.transform='translate(-50%,-50%) rotate('+(-vinylAngle)+'deg)';
+    vinylRAF=requestAnimationFrame(spinVinyl);
+  }
+  musicBtn.addEventListener('click',function(){
+    if(!playing){
+      bgMusic.play().catch(function(){});
+      vinylSpinning=true;
+      vinylRAF=requestAnimationFrame(spinVinyl);
+      musicIcon.innerHTML='&#9646;&#9646;';
+      musicBtn.lastChild.textContent=' PAUSE';
+      playing=true;
+    }else{
+      bgMusic.pause();
+      vinylSpinning=false;
+      if(vinylRAF)cancelAnimationFrame(vinylRAF);
+      musicIcon.innerHTML='&#9654;';
+      musicBtn.lastChild.textContent=' PLAY';
+      playing=false;
+    }
+  });
+
+  // ===== FIREWORKS =====
+  const fwCanvas=document.getElementById('fireworks');
+  const fwCtx=fwCanvas.getContext('2d');
+  let rockets=[],particles=[],fwRunning=false;
+  const fwColors=['#F5C542','#E84855','#FF8A8A','#FFE17D','#FFF3D4','#CC2936','#FFFFFF','#F5D76E'];
+
+  function initFw(){fwCanvas.width=window.innerWidth;fwCanvas.height=window.innerHeight}
+  window.addEventListener('resize',initFw);
+
+  function launchRocket(){
+    rockets.push({
+      x:Math.random()*fwCanvas.width,
+      y:fwCanvas.height,
+      tx:fwCanvas.width*0.15+Math.random()*fwCanvas.width*0.7,
+      ty:fwCanvas.height*0.08+Math.random()*fwCanvas.height*0.35,
+      speed:4+Math.random()*3,
+      trail:[],
+      color:fwColors[Math.floor(Math.random()*fwColors.length)]
+    });
+  }
+
+  function explode(x,y,color){
+    const count=20+Math.floor(Math.random()*15);
+    for(let i=0;i<count;i++){
+      const angle=Math.random()*Math.PI*2;
+      const speed=1+Math.random()*4;
+      const c=Math.random()>0.3?color:fwColors[Math.floor(Math.random()*fwColors.length)];
+      particles.push({
+        x,y,
+        vx:Math.cos(angle)*speed,
+        vy:Math.sin(angle)*speed,
+        life:1,
+        decay:0.008+Math.random()*0.015,
+        color:c,
+        size:2+Math.random()*3
+      });
+    }
+  }
+
+  function fwLoop(){
+    if(!fwRunning)return;
+    fwCtx.clearRect(0,0,fwCanvas.width,fwCanvas.height);
+
+    // Rockets
+    for(let i=rockets.length-1;i>=0;i--){
+      const r=rockets[i];
+      const dx=r.tx-r.x,dy=r.ty-r.y;
+      const dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist<r.speed*2){
+        explode(r.x,r.y,r.color);
+        rockets.splice(i,1);continue;
+      }
+      r.x+=dx/dist*r.speed;
+      r.y+=dy/dist*r.speed;
+      r.trail.push({x:r.x,y:r.y,a:1});
+      if(r.trail.length>6)r.trail.shift();
+      for(let t=0;t<r.trail.length;t++){
+        r.trail[t].a*=0.85;
+        fwCtx.fillStyle=r.color;
+        fwCtx.globalAlpha=r.trail[t].a*0.6;
+        fwCtx.fillRect(r.trail[t].x-1,r.trail[t].y-1,3,3);
+      }
+      fwCtx.globalAlpha=1;
+      fwCtx.fillStyle=r.color;
+      fwCtx.fillRect(r.x-2,r.y-2,4,4);
+    }
+
+    // Particles
+    for(let i=particles.length-1;i>=0;i--){
+      const p=particles[i];
+      p.x+=p.vx;p.y+=p.vy;
+      p.vy+=0.04;// gravity
+      p.vx*=0.99;p.vy*=0.99;
+      p.life-=p.decay;
+      if(p.life<=0){particles.splice(i,1);continue}
+      fwCtx.globalAlpha=p.life;
+      fwCtx.fillStyle=p.color;
+      const sz=p.size*p.life;
+      fwCtx.fillRect(p.x-sz/2,p.y-sz/2,sz,sz);
+    }
+    fwCtx.globalAlpha=1;
+    requestAnimationFrame(fwLoop);
+  }
+
+  function startFireworks(){
+    initFw();
+    fwCanvas.classList.add('active');
+    fwRunning=true;
+    fwLoop();
+    // Launch rockets periodically
+    function burst(){
+      const count=1+Math.floor(Math.random()*2);
+      for(let i=0;i<count;i++)setTimeout(launchRocket,i*300);
+    }
+    burst();
+    setInterval(burst,2500);
+  }
+
+  // Countdown — Feb 17 2026 00:00 CET
+  const target=new Date('2026-02-17T00:00:00+01:00');
+  const hEl=document.getElementById('hours'),mEl=document.getElementById('minutes'),sEl=document.getElementById('seconds');
+  const hB=document.getElementById('hBlock'),mB=document.getElementById('mBlock'),sB=document.getElementById('sBlock');
+  let countdownDone=false;
+  function pad(n){return String(n).padStart(2,'0')}
+  function tA(b){b.classList.add('tick');setTimeout(()=>b.classList.remove('tick'),150)}
+
+  // Password system — must be defined before updateCD runs
+  var THE_PASSWORD='ruaiuhalinh2303';
+  var unlockBtn=document.getElementById('unlockBtn');
+  var pwBackdrop=document.getElementById('pwBackdrop');
+  var pwModal=document.getElementById('pwModal');
+  var pwInput=document.getElementById('pwInput');
+  var pwError=document.getElementById('pwError');
+  var pwCancel=document.getElementById('pwCancel');
+  var pwSubmit=document.getElementById('pwSubmit');
+  var pwInline=document.getElementById('pwInline');
+  var pwInlineCode=document.getElementById('pwInlineCode');
+
+  function openPwModal(){pwBackdrop.classList.add('open');pwModal.classList.add('open');pwInput.value='';pwError.textContent='';setTimeout(function(){pwInput.focus()},100)}
+  function closePwModal(){pwBackdrop.classList.remove('open');pwModal.classList.remove('open')}
+  function showPasswordReveal(){
+    pwInlineCode.textContent=THE_PASSWORD;
+    pwInline.classList.add('show');
+  }
+
+  unlockBtn.addEventListener('click',openPwModal);
+  pwCancel.addEventListener('click',closePwModal);
+  pwBackdrop.addEventListener('click',closePwModal);
+
+  pwSubmit.addEventListener('click',tryUnlock);
+  pwInput.addEventListener('keydown',function(e){if(e.key==='Enter')tryUnlock()});
+
+  function tryUnlock(){
+    if(pwInput.value===THE_PASSWORD){
+      closePwModal();
+      unlockBtn.style.display='none';
+      countdownDone=true;
+      showBottle();
+    }else{
+      pwError.textContent='WRONG PASSWORD';
+      pwInput.value='';
+      pwModal.style.animation='none';void pwModal.offsetWidth;
+      pwModal.style.animation='pwShake 0.3s steps(4)';
+    }
+  }
+
+  function updateCD(){const d=target-new Date();if(d<=0){hEl.textContent='00';mEl.textContent='00';sEl.textContent='00';if(!countdownDone){countdownDone=true;showPasswordReveal()}return}
+    const h=pad(Math.floor(d/3600000)),m=pad(Math.floor((d%3600000)/60000)),s=pad(Math.floor((d%60000)/1000));
+    if(sEl.textContent!==s){sEl.textContent=s;tA(sB)}if(mEl.textContent!==m){mEl.textContent=m;tA(mB)}if(hEl.textContent!==h){hEl.textContent=h;tA(hB)}}
+  var cdInterval=setInterval(updateCD,200);updateCD();
+
+  const phaseCountdown=document.getElementById('phaseCountdown'),phaseBottle=document.getElementById('phaseBottle'),phaseCelebrate=document.getElementById('phaseCelebrate');
+  const corkGroup=document.getElementById('corkGroup'),bottleWrap=document.getElementById('bottleWrap'),champagneFlood=document.getElementById('champagneFlood'),progressEl=document.getElementById('progress');
+  const TOTAL=10;let clicks=0,popped=false;
+  for(let i=0;i<TOTAL;i++){const d=document.createElement('div');d.className='progress-dot';progressEl.appendChild(d)}
+  const progDots=progressEl.querySelectorAll('.progress-dot');
+
+  function showBottle(){phaseCountdown.classList.add('hidden');document.body.classList.add('bottle-bg');
+    vinylSpinning=false;if(vinylRAF)cancelAnimationFrame(vinylRAF);
+    setTimeout(()=>phaseBottle.classList.add('active'),600)}
+
+  let corkOffset=0;
+  corkGroup.addEventListener('click',()=>{if(popped)return;clicks++;if(clicks<=TOTAL)progDots[clicks-1].classList.add('filled');
+    if(clicks<TOTAL){if(clicks===9)corkOffset=6;const wx=1+clicks*0.5,wd=0.3+clicks*0.25,y=-corkOffset;
+      corkGroup.animate([{transform:`translateX(0) translateY(${y}px) rotate(0)`,offset:0},{transform:`translateX(${wx}px) translateY(${y}px) rotate(${wd}deg)`,offset:0.2},{transform:`translateX(${-wx}px) translateY(${y}px) rotate(${-wd*0.7}deg)`,offset:0.5},{transform:`translateX(${wx*0.3}px) translateY(${y}px) rotate(${wd*0.2}deg)`,offset:0.75},{transform:`translateX(0) translateY(${y}px) rotate(0)`,offset:1}],{duration:250,easing:'ease-out',fill:'forwards'});
+      bottleWrap.classList.remove('shake');void bottleWrap.offsetWidth;bottleWrap.classList.add('shake')}else{popCork()}});
+
+  function popCork(){popped=true;
+    corkGroup.animate([{transform:`translateX(0) translateY(${-corkOffset}px) rotate(0)`,opacity:1},{transform:`translateX(25px) translateY(${-corkOffset-50}px) rotate(20deg)`,opacity:1,offset:0.3},{transform:`translateX(70px) translateY(${-corkOffset-150}px) rotate(55deg)`,opacity:0}],{duration:600,easing:'cubic-bezier(0.22,1,0.36,1)',fill:'forwards'});
+    const wr=bottleWrap.getBoundingClientRect(),sx=wr.width/140,sy=wr.height/380,cx=wr.left+70*sx,cy=wr.top+56*sy;
+    spawnDrops(cx,cy);spawnStreams(cx,cy);setTimeout(()=>spawnFoam(cx,cy),150);
+    setTimeout(()=>{champagneFlood.classList.add('spilling');document.body.classList.remove('bottle-bg');document.body.classList.add('popped-bg')},500);
+    setTimeout(()=>{phaseBottle.classList.remove('active');setTimeout(()=>{
+      document.body.classList.remove('popped-bg');document.body.classList.add('celebrate-bg');
+      // Stop redundant animations
+      clearInterval(lanternInterval);
+      clearInterval(cdInterval);
+      document.getElementById('starsBox').style.display='none';
+      document.getElementById('lanterns').style.display='none';
+      // Start celebration effects
+      phaseCelebrate.classList.add('active');startConfetti();startFireworks()},500)},3000)}
+
+  // Letter
+  const envelopeBtn=document.getElementById('envelopeBtn'),letterOverlay=document.getElementById('letterOverlay'),letterBackdrop=document.getElementById('letterBackdrop'),letterClose=document.getElementById('letterClose');
+  envelopeBtn.addEventListener('click',()=>{letterOverlay.classList.add('open');letterBackdrop.classList.add('open')});
+  letterClose.addEventListener('click',()=>{letterOverlay.classList.remove('open');letterBackdrop.classList.remove('open')});
+  letterBackdrop.addEventListener('click',()=>{letterOverlay.classList.remove('open');letterBackdrop.classList.remove('open')});
+
+  // Chest / Key / Cheque
+  var CHEST_KEY='everythingwillbeokay';
+  var chestBtn=document.getElementById('chestBtn');
+  var keyBackdrop=document.getElementById('keyBackdrop');
+  var keyModal=document.getElementById('keyModal');
+  var keyInput=document.getElementById('keyInput');
+  var keyError=document.getElementById('keyError');
+  var keyCancel=document.getElementById('keyCancel');
+  var keySubmit=document.getElementById('keySubmit');
+  var chequeBackdrop=document.getElementById('chequeBackdrop');
+  var chequeOverlay=document.getElementById('chequeOverlay');
+  var chequeClose=document.getElementById('chequeClose');
+
+  function openKeyModal(){keyBackdrop.classList.add('open');keyModal.classList.add('open');keyInput.value='';keyError.textContent='';setTimeout(function(){keyInput.focus()},100)}
+  function closeKeyModal(){keyBackdrop.classList.remove('open');keyModal.classList.remove('open')}
+  function openCheque(){chequeBackdrop.classList.add('open');chequeOverlay.classList.add('open')}
+  function closeCheque(){chequeBackdrop.classList.remove('open');chequeOverlay.classList.remove('open')}
+
+  chestBtn.addEventListener('click',openKeyModal);
+  keyCancel.addEventListener('click',closeKeyModal);
+  keyBackdrop.addEventListener('click',closeKeyModal);
+  chequeClose.addEventListener('click',closeCheque);
+  chequeBackdrop.addEventListener('click',closeCheque);
+
+  // Second letter
+  var letter2Overlay=document.getElementById('letter2Overlay');
+  var letter2Backdrop=document.getElementById('letter2Backdrop');
+  var letter2Close=document.getElementById('letter2Close');
+  var chequeContinue=document.getElementById('chequeContinue');
+
+  function openLetter2(){letter2Backdrop.classList.add('open');letter2Overlay.classList.add('open')}
+  function closeLetter2(){letter2Backdrop.classList.remove('open');letter2Overlay.classList.remove('open')}
+
+  chequeContinue.addEventListener('click',function(){closeCheque();setTimeout(openLetter2,300)});
+  letter2Close.addEventListener('click',closeLetter2);
+  letter2Backdrop.addEventListener('click',closeLetter2);
+
+  keySubmit.addEventListener('click',tryChest);
+  keyInput.addEventListener('keydown',function(e){if(e.key==='Enter')tryChest()});
+
+  function tryChest(){
+    if(keyInput.value===CHEST_KEY){
+      closeKeyModal();
+      openCheque();
+    }else{
+      keyError.textContent='WRONG KEY!';
+      keyInput.value='';
+      keyModal.style.animation='none';void keyModal.offsetWidth;
+      keyModal.style.animation='keyShake 0.3s steps(4)';
+    }
+  }
+
+  // Effects
+  function spawnDrops(cx,cy){const c=['#F5D76E','#D4A05A','#C9A84C','#FFF0B3','#E8C84A','#FFE88A'];for(let w=0;w<2;w++){setTimeout(()=>{for(let i=0;i<25;i++){const d=document.createElement('div');Object.assign(d.style,{position:'fixed',zIndex:'8',pointerEvents:'none',background:c[Math.floor(Math.random()*c.length)],left:cx+'px',top:cy+'px'});const sz=2+Math.random()*8;d.style.width=sz+'px';d.style.height=sz+'px';document.body.appendChild(d);const sX=(Math.random()-0.5)*300,sU=-(200+Math.random()*400),g=150+Math.random()*200,dl=Math.random()*200,dur=800+Math.random()*600;setTimeout(()=>{d.animate([{transform:'translate(0,0) scale(1)',opacity:1},{transform:`translate(${sX*0.5}px,${sU}px) scale(1.2)`,opacity:0.9,offset:0.35},{transform:`translate(${sX}px,${sU+g}px) scale(0.3)`,opacity:0}],{duration:dur,easing:'cubic-bezier(0.1,0.8,0.3,1)',fill:'forwards'});setTimeout(()=>d.remove(),dur+50)},dl)}},w*250)}}
+  function spawnStreams(cx,cy){for(let i=0;i<5;i++){const s=document.createElement('div');const w=3+Math.random()*7,a=-12+Math.random()*24,h=100+Math.random()*200;Object.assign(s.style,{position:'fixed',zIndex:'7',pointerEvents:'none',left:(cx-w/2+(Math.random()-0.5)*20)+'px',top:cy+'px',width:w+'px',height:'0px',background:'linear-gradient(0deg,transparent,#D4A05A,#F5D76E)',transformOrigin:'bottom center'});document.body.appendChild(s);setTimeout(()=>{s.animate([{height:'0px',opacity:0.9,transform:`rotate(${a}deg) translateY(0)`},{height:h+'px',opacity:0.8,transform:`rotate(${a}deg) translateY(${-h}px)`,offset:0.4},{height:(h*0.3)+'px',opacity:0,transform:`rotate(${a}deg) translateY(${-h*0.6}px)`}],{duration:1100,easing:'ease-out',fill:'forwards'});setTimeout(()=>s.remove(),1300)},i*60)}}
+  function spawnFoam(cx,cy){for(let i=0;i<15;i++){const b=document.createElement('div');b.className='foam-bubble';const sz=4+Math.random()*10;b.style.width=sz+'px';b.style.height=sz+'px';b.style.left=(cx-50+Math.random()*100)+'px';b.style.top=(cy-10+Math.random()*20)+'px';document.body.appendChild(b);const dx=(Math.random()-0.5)*120,dy=-(40+Math.random()*160);setTimeout(()=>{b.animate([{transform:'translate(0,0) scale(0)',opacity:0.9},{transform:`translate(${dx*0.6}px,${dy}px) scale(1.1)`,opacity:0.6,offset:0.45},{transform:`translate(${dx}px,${dy*0.6}px) scale(0.2)`,opacity:0}],{duration:1400+Math.random()*600,easing:'ease-out',fill:'forwards'});setTimeout(()=>b.remove(),2400)},Math.random()*600)}}
+  function startConfetti(){const c=['#F5C542','#CC2936','#E84855','#FFE17D','#FF8A8A','#FFF3D4'];function burst(){for(let i=0;i<10;i++){const e=document.createElement('div');e.className='confetti';e.style.left=Math.random()*100+'%';e.style.background=c[Math.floor(Math.random()*c.length)];e.style.animationDuration=(2.5+Math.random()*3)+'s';e.style.animationDelay=Math.random()*1.2+'s';const sz=4+Math.random()*6;e.style.width=sz+'px';e.style.height=sz+'px';document.body.appendChild(e);setTimeout(()=>e.remove(),6000)}}burst();setInterval(burst,5000)}
+</script>
+</body>
+</html>
